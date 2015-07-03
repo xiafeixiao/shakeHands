@@ -1,0 +1,353 @@
+
+修改：
+2015.06.12 初次定义                             ［modified by shoutian］
+2015.06.15 增加保存头像链接、上传通讯录的接口         ［modified by shoutian］ 
+2015.06.17 增加获取验证码的接口                    ［modified by shoutian］
+2015.06.19 增加公共上行                          ［modified by shoutian］
+2015.06.23 增加修改密码协议                       ［modified by shoutian］
+2015.06.28 增加查询动态列表的协议                  ［modified by shoutian］
+2015.06.29 修改更新用户信息的协议，删除了修改手机号    ［modified by shoutian］
+
+
+					中间层协议：
+
+
+通用异常代码
+
+	DC_ERROR = -1;					//失败
+	DC_OK = 0;					//成功
+	
+	// 网络错误码定义
+	DC_NET_TIME_OUT	        	= 504;		// 网络超时
+	DC_NET_DATA_ERROR		= 1000;		// 网络传输数据错误
+	DC_NET_GENER_ERROR 		= 1001;		// 网络通用错误标识
+	DC_JSON_PARSER_ERROR		= 1002;		// JSON解析错误 
+	DC_JSON_TAG_ERROR               =1003;      	// 未知的tag
+	DC_JSON_NULL_PARAM         	=1004;      	//参数为空
+	DC_ERROR_UPDATE_AVATAR      	=2001;      	//上传头像失败
+	DC_ERROR_USER_EXISTED 		= 2002;      	// 用户已经存在
+	DC_ERROR_USER_NOT_EXIST 	= 2004;      	// 用户不存在
+	DC_ERROR_USER_NAME_PASS_INVALID = 2005;		//用户名或密码无效
+	DC_ERROR_USER_PASS_INITIALIZED  = 2006;		//密码为初始密码
+	DC_ERROR_USER_REGIST_ERROR 	= 2007;		//注册失败
+	DC_ERROR_USER_UPDATE_ERROR 	= 2008;		//更新失败
+	DC_ERROR_CHECKCODE 		= 2009;		//获取验证码错误
+	DC_ERROR_OLD_PASS_ERROR         = 2010;         //旧密码错误
+
+
+//////////////////////////
+app首页地址：http://182.92.243.155/itgghnav/index.html
+
+服务器地址：http://182.92.243.155/MobileAppServer/AppService?tag=
+（tag：传入请求方法的tag值）
+
+	tag=101 上传通讯录
+	tag=102 上传头像
+	tag=103 登录
+	tag=104 注册
+	tag=105 获取用户信息
+	tag=106 修改用户信息
+	tag=107 修改密码
+	tag=108 获取验证码
+
+公共上行：每个接口都必须上传的参数
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202"
+｝
+
+1. 登录 tag＝103
+
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202",
+    "tag": “103”,
+    "mobile": "15100112700",
+    "userpass": "123456"
+}
+
+下行：
+{
+    "errno": 0,
+    "errmsg": "成功",
+    "tag": "103",
+    "position": "zhangsan",
+    "sex": 1,
+    "userid": “1”,
+    "avatar": "http://www.baidu.com",
+    "contacts": [
+        "15100110909",
+        "15100110909"
+    ],
+    "weixin": "zhangsanzhangsan",
+    "email": "zhangsan@zhangsan.com",
+    "company": "zhangsan",
+    "name": "zhangsan",
+    "qq": "123908766",
+    "mobile": "15100110909"
+}
+
+错误返回：
+{
+    "errno": -1,
+    "errmsg": “登录失败”,
+    "tag": "103",
+}
+
+
+2.注册 tag＝104
+
+regist_from: 0:web，1:android，2:iPhone
+
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202",
+    "regist_from": 1,
+    "tag": “104”,
+    "userpass": "123456",
+    "mobile": "15900110909”,
+    “name”:”shoutian”
+}
+
+下行：
+
+{
+    "position": "",
+    "sex": 0,
+    "tag": "104",
+    "userid": "25",
+    "avatar": "",
+    "contacts": [
+        ""
+    ],
+    "errno": 0,
+    "weixin": "",
+    "email": "",
+    "company": "",
+    "name": "",
+    "errmsg": "成功",
+    "qq": "",
+    "mobile": "15700110909"
+}
+
+3.获取用户信息 tag＝105
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202",
+    "tag": “105”,
+    "userid": "1",
+    "mobile": "15100110909"
+}
+
+下行：
+
+{
+    "position": "zhangsan",
+    "sex": 1,
+    "tag": "105",
+    "userid": "1",
+    "avatar": "http://www.baidu.com",
+    "contacts": [
+        "15100110909",
+        "15100110909"
+    ],
+    "errno": 0,
+    "weixin": "zhangsanzhangsan",
+    "email": "zhangsan@zhangsan.com",
+    "company": "zhangsan",
+    "name": "zhangsan",
+    "errmsg": "成功",
+    "qq": "123908766",
+    "mobile": "15100110909"
+}
+
+4.修改用户信息：tag＝106
+
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202",
+    "position": "zhangsan",
+    "sex": 1,
+    "weixin": "zhangsanzhangsan",
+    "email": "zhangsan@zhangsan.com",
+    "tag": “106”,
+    "company": "zhangsan2",
+    "name": "zhangsan2",
+    "userid": "1",
+    "qq": "123908766"
+}
+
+
+下行：
+{
+    "errno": 0,
+    "tag": "106",
+    "errmsg": "成功"
+}
+
+5.保存头像链接tag＝102
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202",
+    "tag": “102”,
+    "userid": "1",
+    "avatar": "http://www.baidu.com"
+}
+
+下行：
+{
+    "errno": 0,
+    "tag": "102",
+    "errmsg": "上传头像成功"
+}
+
+6.上传通讯录tag＝101
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202",
+    "tag": "101",
+    "userid": "1",
+    "contactList": [
+        {
+            "name": "zhangsan0",
+            "mobile": "15100000000"
+        },
+        {
+            "name": "zhangsan1",
+            "mobile": "15100000001"
+        },
+        {
+            "name": "zhangsan2",
+            "mobile": "15100000002"
+        }
+    ]
+}
+
+
+下行：
+{
+    "errno": 0,
+    "tag": "101",
+    "errmsg": "通讯录上传成功"
+}
+
+7.获取验证码tag＝108
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202",
+    "tag": “108”,
+    "mobile": "15100110909"
+}
+
+下行：
+
+{
+    "checkcode": "686325",
+    "errno": 0,
+    "tag": "108",
+    "errmsg": "成功"
+}
+
+8.修改密码tag＝107
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202”,
+    "tag": "107",
+    "newpass": "654321",
+    "userid": "1",
+    "userpass": "123456",
+    "mobile": "15100110909"
+}
+
+下行：
+{
+    "errno": 0,
+    "tag": "107",
+    "errmsg": "成功"
+}
+
+9.获取动态列表tag=201
+上行：
+{
+    "version": "0.0.2",
+    "ua": "Nexus 5",
+    "os": "5.0",
+    "client": "android",
+    "channel": "202”,
+    "tag": "201"
+}
+
+下行：
+{
+    "errno": 0,
+    "tag": "201",
+    "errmsg": "成功",
+    "financeRecords": [
+        {
+            “recordId": "35",
+            "weixin": "111111",
+            "email": "sdsd@sdsd.cokk",
+            "submitTime": "2015-06-16 05:50:08",
+            "name": "dsdsdsdsdsdsd",
+            "projectName": "dsdsdsdsd",
+            "brief": "SDSDSDSDSDSDSDSDSDSDS",
+            "mode": 1,
+            "mobile": "1510000002"
+        },
+        {
+            "recordId": "34",
+            "weixin": "111111",
+            "email": "111111@sss.com",
+            "submitTime": "2015-01-26 12:46:59",
+            "name": "11111111111",
+            "projectName": "dsdsds",
+            "brief": "dsdsdsdsdsdsd",
+            "mode": 1,
+            "mobile": "11111111111"
+        }
+    ]
+}
+
+ps:mode定义：1 	天使
+	    2 	A轮
+	    3 	B轮
+	    4 	新三板
+	    5 	并购
+默认为“天使”
+
+
