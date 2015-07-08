@@ -7,6 +7,8 @@
 2015.06.23 增加修改密码协议                       ［modified by shoutian］
 2015.06.28 增加查询动态列表的协议                  ［modified by shoutian］
 2015.06.29 修改更新用户信息的协议，删除了修改手机号    ［modified by shoutian］
+2015.07.07 动态列表增加返回头像字段，修复登录时，
+           无手机号纪录返回密码为初始密码的bug        [modified by shoutian]
 
 
 					中间层协议：
@@ -327,7 +329,8 @@ regist_from: 0:web，1:android，2:iPhone
             "projectName": "dsdsdsdsd",
             "brief": "SDSDSDSDSDSDSDSDSDSDS",
             "mode": 1,
-            "mobile": "1510000002"
+            "mobile": "1510000002”,
+	    “avatar”:”http://www.baidu.com”
         },
         {
             "recordId": "34",
@@ -338,7 +341,8 @@ regist_from: 0:web，1:android，2:iPhone
             "projectName": "dsdsds",
             "brief": "dsdsdsdsdsdsd",
             "mode": 1,
-            "mobile": "11111111111"
+            "mobile": "11111111111",
+	    “avatar”:”http://www.baidu.com”
         }
     ]
 }
